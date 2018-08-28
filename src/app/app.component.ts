@@ -1,10 +1,24 @@
 import { Component } from '@angular/core';
 
+import { Subject } from 'rxjs';
+
+import { SearchService } from './search.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [SearchService]
 })
 export class AppComponent {
-  title = 'real-time-search-ng6';
+  results: any;
+  searchTerm$ = new Subject<string>();
+
+  constructor(private searchService: SearchService) {
+    this.searchService.search(this.searchTerm$)
+      .subscribe(results => {
+        this.results = results;
+      });
+  }
+
 }
