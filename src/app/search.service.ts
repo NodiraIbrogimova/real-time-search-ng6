@@ -19,14 +19,13 @@ export class SearchService {
   search(terms: Observable<string>) {
     return terms.pipe(debounceTime(400),
       distinctUntilChanged(),
-      switchMap(_ => interval(50), term => { this.searchEntries(term) }));
+      switchMap(term => this.searchEntries(term)));
   }
 
-  searchEntries(term: any) {
-    this.http.get(this.baseUrl + this.queryUrl + term).pipe(map(res => {
-      res.json()
-    }));
+  searchEntries(term) {
+    return this.http
+      .get(this.baseUrl + this.queryUrl + term)
+      .pipe(map(res => res.json()));
   }
-
 
 }
